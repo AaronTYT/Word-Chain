@@ -1,0 +1,10 @@
+[
+    {
+        "players": 2,
+        "names": [
+            "Daniel",
+            "Rick"
+        ],
+        "chain": 0
+    }
+]

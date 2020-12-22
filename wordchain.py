@@ -54,7 +54,7 @@ while True:
 #Main gameplay loop.
 while True:
     wordType = random.choice(wordTypes)
-
+    
     #If the game begins for the first time. Randomly select a letter by using a string module.
     if chain == 0:
         startLetter = random.choice(string.ascii_letters).lower()
@@ -74,26 +74,33 @@ while True:
 
     if word[0] == startLetter and word not in usedWords:
         #Send the request to the web server to test if the word is in the wordType
-        response = urllib.request.urlopen('http://api.wordnik.com:80/v4/word.json/' \
+
+        try:
+            
+            response = urllib.request.urlopen('http://api.wordnik.com:80/v4/word.json/' \
                                   + word \
                                   + '/definitions?limit=5&partOfSpeech=' \
                                   + wordType \
-                                  + '&api_key=aaaa946871985c2eb2004061aba0695e00190753d6560ebea')
+                                  + '&api_key=brvgptv098oeecpn5rybfym39ph2ajqcf92hdtuxs4rbnidsb')
+        except:
+            print("The word", word, "does not contain any data. End program.")
+            break
         #Grab or load the wordData from the response.
         wordData = json.load(response)
         
-   
         #If the user entered the correct
         #start letter and the wordData in list is nothing (means there is no actual json data.)
         #Stop the wordChain.
-        if not wordData:
-            print("The word", word, "does not contain any data. End program.")
-            break
-            
+        #if not wordData:
         print("Good job, ",playerNames[playerCount], " -'", word, "' is a ", wordType, " defined as...", sep="")
         for eachDef in wordData:
-            print(" •" , eachDef['text'])
-
+            #checking whether it has the key "text" from the json data.
+            try:
+                if eachDef['text']:
+                    print(" •" , eachDef['text'])
+            except KeyError:
+                continue
+            
         chain +=1
         if chain >=2:
             plural = "s"
